@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Check if user is already logged in
+        // If yes, redirect to dashboard, otherwise to login page
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Spending Tracker</h1>
+        <p class="text-center">Redirecting...</p>
+    </div>
+</body>
+</html>

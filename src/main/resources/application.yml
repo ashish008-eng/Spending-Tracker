@@ -1,0 +1,12 @@
+###spring.application.name=spendingTracker
+
+#spring:
+#  data:
+#    mongodb:
+#      uri:
+
+#server:
+#  port: 8080
+
+#jwt:
+#  secret: mysecretkey

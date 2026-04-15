@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Tracker - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-wallet"></i>
+                    <span>SpendingTracker</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="expenses">
+                    <i class="fas fa-list"></i>
+                    <span>Expenses</span>
+                </a>
+                <a href="#" class="nav-item" data-section="monthly-reports">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Monthly Reports</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <div class="sidebar-footer">
+                    <div class="setting-item" style="padding: 16px 20px; border-bottom: none; background: transparent;">
+                        <div class="setting-info">
+                            <h3 style="margin-bottom: 4px;">Dark Mode</h3>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.8);">Toggle dark theme</p>
+                        </div>
+                        <label class="toggle-switch" style="margin: 0;">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Mobile Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="welcomeMessage">Dashboard</h1>
+                    <p class="subtitle">Track your expenses and manage your budget</p>
+                </div>
+                <div class="header-date">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </header>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Spent</span>
+                            <span class="stat-value" id="totalAmount">₹0.00</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-secondary">
+                        <div class="stat-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Expenses</span>
+                            <span class="stat-value" id="totalExpenses">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-card-tertiary">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Average</span>
+                            <span class="stat-value" id="avgExpense">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Distribution Chart -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h2>
+                                <i class="fas fa-chart-pie"></i>
+                                Expense Distribution by Category
+                            </h2>
+                        </div>
+                        <div class="chart-content">
+                            <div class="chart-wrapper">
+                                <svg id="donutChart" viewBox="0 0 200 200">
+                                    <circle id="donutCenter" cx="100" cy="100" r="50" fill="white"/>
+                                    <text id="centerLabel" x="100" y="95" text-anchor="middle" fill="#6366f1" font-size="24" font-weight="bold">0</text>
+                                    <text x="100" y="115" text-anchor="middle" fill="#64748b" font-size="10">EXPENSES</text>
+                                </svg>
+                            </div>
+                            <div class="chart-legend" id="chartLegend">
+                                <!-- Legend items will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- Expense Form -->
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h2 id="formTitle">
+                                <i class="fas fa-plus-circle"></i>
+                                Add New Expense
+                            </h2>
+                        </div>
+                        <form id="expenseForm" class="expense-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="description">
+                                        <i class="fas fa-tag"></i>
+                                        Description
+                                    </label>
+                                    <input type="text" id="description" name="description" placeholder="What did you spend on?" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        Amount
+                                    </label>
+                                    <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="category">
+                                        <i class="fas fa-folder"></i>
+                                        Category
+                                    </label>
+                                    <select id="category" name="category" required>
+                                        <option value="">Select a category</option>
+                                        <option value="Food">🍔 Food & Dining</option>
+                                        <option value="Transport">🚗 Transport</option>
+                                        <option value="Entertainment">🎬 Entertainment</option>
+                                        <option value="Utilities">💡 Utilities</option>
+                                        <option value="Shopping">🛍️ Shopping</option>
+                                        <option value="Healthcare">🏥 Healthcare</option>
+                                        <option value="Education">📚 Education</option>
+                                        <option value="Travel">✈️ Travel</option>
+                                        <option value="Other">📦 Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date">
+                                        <i class="far fa-calendar"></i>
+                                        Date
+                                    </label>
+                                    <input type="date" id="date" name="date" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Save Expense
+                                </button>
+                                <button type="button" id="cancelEditBtn" class="btn btn-secondary" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                    Cancel Edit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Expense List -->
+                    <div class="expenses-card">
+                        <div class="expenses-header">
+                            <h2>
+                                <i class="fas fa-list-alt"></i>
+                                Recent Expenses
+                            </h2>
+                            <div class="filter-controls">
+                                <select id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                    <option value="Food">🍔 Food</option>
+                                    <option value="Transport">🚗 Transport</option>
+                                    <option value="Entertainment">🎬 Entertainment</option>
+                                    <option value="Utilities">💡 Utilities</option>
+                                    <option value="Shopping">🛍️ Shopping</option>
+                                    <option value="Healthcare">🏥 Healthcare</option>
+                                    <option value="Education">📚 Education</option>
+                                    <option value="Travel">✈️ Travel</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="expenseList" class="expense-list">
+                            <!-- Expenses will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expenses Section -->
+            <section id="expenses-section" class="content-section">
+                <header class="top-header">
+                    <div class="header-title">
+                        <h1>All Expenses</h1>
+                        <p class="subtitle">View and manage all your expenses</p>
+                    </div>
+                    <div class="header-date">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="expensesDate"></span>
+                    </div>
+                </header>
+
+                <div class="expenses-card full-width">
+                    <div class="expenses-header">
+                        <h2>
+                            <i class="fas fa-list-alt"></i>
+                            Complete Expense History
+                        </h2>
+                        <div class="filter-controls">
+                            <select id="allExpensesFilter">
+                                <option value="">All Categories</option>
+                                <option value="Food">🍔 Food</option>
+                                <option value="Transport">🚗 Transport</option>
+                                <option value="Entertainment">🎬 Entertainment</option>
+                                <option value="Utilities">💡 Utilities</option>
+                                <option value="Shopping">🛍️ Shopping</option>
+                                <option value="Healthcare">🏥 Healthcare</option>
+                                <option value="Education">📚 Education</option>
+                                <option value="Travel">✈️ Travel</option>
+                                <option value="Other">📦 Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="allExpensesList" class="expense-list">
+                        <!-- All expenses will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Reports Section -->
+            <section id="monthly-reports-section" class="content-section">
+                <header class="top-header">
+                    <div class="header-title">
+                        <h1>Monthly Reports</h1>
+                        <p class="subtitle">View and download your monthly expense reports</p>
+                    </div>
+                </header>
+
+                <div class="monthly-reports-grid">
+                    <!-- Month Selection Card -->
+                    <div class="month-selection-card">
+                        <div class="form-header">
+                            <h2>
+                                <i class="fas fa-calendar"></i>
+                                Select Month & Year
+                            </h2>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportMonth">
+                                <i class="fas fa-calendar-alt"></i>
+                                Month
+                            </label>
+                            <select id="reportMonth">
+                                <option value="0">January</option>
+                                <option value="1">February</option>
+                                <option value="2">March</option>
+                                <option value="3">April</option>
+                                <option value="4">May</option>
+                                <option value="5">June</option>
+                                <option value="6">July</option>
+                                <option value="7">August</option>
+                                <option value="8">September</option>
+                                <option value="9">October</option>
+                                <option value="10">November</option>
+                                <option value="11">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportYear">
+                                <i class="fas fa-calendar-check"></i>
+                                Year
+                            </label>
+                            <select id="reportYear">
+                                <!-- Years will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="loadMonthlyReport()">
+                                <i class="fas fa-search"></i>
+                                View Report
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="downloadMonthlyPDF()">
+                                <i class="fas fa-download"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Summary Card -->
+                    <div class="monthly-summary-card">
+                        <div class="form-header">
+                            <h2>
+                                <i class="fas fa-chart-bar"></i>
+                                Monthly Summary
+                            </h2>
+                        </div>
+                        <div id="monthlySummaryContent">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <p>Select a month and year to view your expense report</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Expenses List -->
+                    <div class="monthly-expenses-card full-width">
+                        <div class="expenses-header">
+                            <h2>
+                                <i class="fas fa-list-alt"></i>
+                                <span id="monthlyExpensesTitle">Expense Details</span>
+                            </h2>
+                            <div class="monthly-stats">
+                                <span class="stat-badge" id="monthlyCountBadge">0 expenses</span>
+                                <span class="stat-badge stat-badge-primary" id="monthlyTotalBadge">₹0.00</span>
+                            </div>
+                        </div>
+                        <div id="monthlyExpensesList" class="expense-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+                                <p>No expenses found for the selected month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <header class="top-header">
+                    <div class="header-title">
+                        <h1>Settings</h1>
+                        <p class="subtitle">Manage your account and preferences</p>
+                    </div>
+                </header>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h2>
+                                <i class="fas fa-user-circle"></i>
+                                Account Settings
+                            </h2>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Profile Information</h3>
+                                    <p>Update your personal details</p>
+                                </div>
+                                <button class="btn btn-secondary">Edit</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Change Password</h3>
+                                    <p>Update your password securely</p>
+                                </div>
+                                <button class="btn btn-secondary">Change</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Email Notifications</h3>
+                                    <p>Manage email alerts and updates</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h2>
+                                <i class="fas fa-bell"></i>
+                                Notification Settings
+                            </h2>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Push Notifications</h3>
+                                    <p>Receive push notifications</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>SMS Alerts</h3>
+                                    <p>Get SMS for important updates</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Weekly Summary</h3>
+                                    <p>Receive weekly expense summary</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h2>
+                                <i class="fas fa-shield-alt"></i>
+                                Security Settings
+                            </h2>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Two-Factor Authentication</h3>
+                                    <p>Add extra security to your account</p>
+                                </div>
+                                <button class="btn btn-secondary">Enable</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Active Sessions</h3>
+                                    <p>Manage your active login sessions</p>
+                                </div>
+                                <button class="btn btn-secondary">View</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Logout All Devices</h3>
+                                    <p>Sign out from all devices</p>
+                                </div>
+                                <button class="btn btn-danger" onclick="logoutAllDevices()">Logout All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
