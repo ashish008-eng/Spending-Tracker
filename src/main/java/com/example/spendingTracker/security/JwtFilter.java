@@ -177,11 +177,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+
+        // ✅ IMPORTANT: Skip filter for public routes
+        if (path.startsWith("/api/auth") ||
+                path.startsWith("/error") ||
+                path.equals("/") ||
+                path.endsWith(".html") ||
+                path.endsWith(".css") ||
+                path.endsWith(".js") ||
+                path.endsWith(".png") ||
+                path.endsWith(".jpg")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String header = request.getHeader("Authorization");
 
@@ -203,11 +222,44 @@ public class JwtFilter extends OncePerRequestFilter {
                                 )
                         );
 
-                // 🔥 THIS LINE FIXES 403
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request,
+//                                    HttpServletResponse response,
+//                                    FilterChain filterChain)
+//            throws ServletException, IOException {
+//
+//        String header = request.getHeader("Authorization");
+//
+//        if (header != null && header.startsWith("Bearer ")) {
+//
+//            String token = header.substring(7);
+//
+//            if (jwtUtil.validateToken(token)) {
+//
+//                Claims claims = jwtUtil.extractAllClaims(token);
+//                String email = claims.getSubject();
+//
+//                UsernamePasswordAuthenticationToken auth =
+//                        new UsernamePasswordAuthenticationToken(
+//                                email,
+//                                null,
+//                                Collections.singletonList(
+//                                        new SimpleGrantedAuthority("ROLE_USER")
+//                                )
+//                        );
+//
+//                // 🔥 THIS LINE FIXES 403
+//                SecurityContextHolder.getContext().setAuthentication(auth);
+//            }
+//        }
+//
+//        filterChain.doFilter(request, response);
+//    }
 }
