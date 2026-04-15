@@ -105,7 +105,12 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight fix
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/**/*.html",
+                                "/**/*.css",
+                                "/**/*.js",
+                                "/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
