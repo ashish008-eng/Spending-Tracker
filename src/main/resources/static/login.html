@@ -104,7 +104,7 @@
             
             try {
                 // Call the login API
-                const response = await fetch('http://localhost:8080/api/auth/login', {
+                const response = await fetch(`${BASE_URL}/api/auth/login`, ... {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -209,7 +209,7 @@
                 submitBtn.innerHTML = '<span class="loading"></span> Signing in...';
                 
                 // Send the Google JWT token to backend for authentication
-                const fetchResponse = await fetch('http://localhost:8080/api/auth/google', {
+                const fetchResponse = await fetch(`${BASE_URL}/api/auth/google`, ... {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 // Global variables
 let editingExpenseId = null;
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://spending-tracker-ha0d.onrender.com';
 const jwtToken = localStorage.getItem('jwtToken');
 let allExpensesData = []; // Store all expenses for monthly reports
 

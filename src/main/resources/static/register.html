@@ -146,7 +146,7 @@
             
             try {
                 // Call the registration API
-                const response = await fetch('http://localhost:8080/api/auth/register', {
+                const response = await fetch('${BASE_URL}/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -207,7 +207,7 @@
                 const userInfo = JSON.parse(atob(response.credential.split('.')[1]));
                 
                 // Send the Google JWT token to backend for registration
-                const fetchResponse = await fetch('http://localhost:8080/api/auth/google', {
+                const fetchResponse = await fetch(`${BASE_URL}/api/auth/google`, ... {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
