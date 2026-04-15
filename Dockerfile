@@ -8,12 +8,25 @@
 #
 #ENTRYPOINT ["java","-jar","app.jar"]
 
+#FROM eclipse-temurin:17-jdk
+#
+#WORKDIR /app
+#
+#COPY target/spendingTracker-0.0.1-SNAPSHOT.jar app.jar
+#
+#EXPOSE 8080
+#
+#ENTRYPOINT ["java","-jar","app.jar"]
+
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY target/spendingTracker-0.0.1-SNAPSHOT.jar app.jar
+# Copy complete project
+COPY . .
 
-EXPOSE 8080
+# Build jar inside container
+RUN ./mvnw clean package -DskipTests
 
-ENTRYPOINT ["java","-jar","app.jar"]
+# Run jar
+CMD ["java","-jar","target/spendingTracker-0.0.1-SNAPSHOT.jar"]
