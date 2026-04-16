@@ -209,7 +209,7 @@
                 submitBtn.innerHTML = '<span class="loading"></span> Signing in...';
                 
                 // Send the Google JWT token to backend for authentication
-                const fetchResponse = await fetch(`${API_BASE_URL}/api/auth/google`, ... {
+                const fetchResponse = await fetch(`${API_BASE_URL}/api/auth/google`,{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
