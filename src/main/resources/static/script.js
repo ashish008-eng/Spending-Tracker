@@ -1,7 +1,7 @@
 // Global variables
 let editingExpenseId = null;
 const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
-const jwtToken = localStorage.getItem('jwtToken');
+//const jwtToken = localStorage.getItem('jwtToken');
 let allExpensesData = []; // Store all expenses for monthly reports
 
 // Toggle password visibility
@@ -85,7 +85,9 @@ function getAuthToken() {
 
 // API helper functions
 async function apiRequest(url, options = {}) {
+
     const token = getAuthToken();
+   // const token = getAuthToken();
     
     const defaultOptions = {
         headers: {
