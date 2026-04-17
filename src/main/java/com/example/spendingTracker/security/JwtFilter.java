@@ -178,8 +178,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
 
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -202,11 +200,11 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String header = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-        if (header != null && header.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-            String token = header.substring(7);
+            String token = authHeader.substring(7);
 
             if (jwtUtil.validateToken(token)) {
 
@@ -229,37 +227,4 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    FilterChain filterChain)
-//            throws ServletException, IOException {
-//
-//        String header = request.getHeader("Authorization");
-//
-//        if (header != null && header.startsWith("Bearer ")) {
-//
-//            String token = header.substring(7);
-//
-//            if (jwtUtil.validateToken(token)) {
-//
-//                Claims claims = jwtUtil.extractAllClaims(token);
-//                String email = claims.getSubject();
-//
-//                UsernamePasswordAuthenticationToken auth =
-//                        new UsernamePasswordAuthenticationToken(
-//                                email,
-//                                null,
-//                                Collections.singletonList(
-//                                        new SimpleGrantedAuthority("ROLE_USER")
-//                                )
-//                        );
-//
-//                // 🔥 THIS LINE FIXES 403
-//                SecurityContextHolder.getContext().setAuthentication(auth);
-//            }
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
 }

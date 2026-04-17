@@ -4,6 +4,15 @@ const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
 //const jwtToken = localStorage.getItem('jwtToken');
 let allExpensesData = []; // Store all expenses for monthly reports
 
+/////////////////////////////////////////////////////////////////////////////////
+const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
+
+// ✅ FIX
+function getAuthToken() {
+    return localStorage.getItem('jwtToken');
+}
+
+//////////////////////////////////////////////////////////////
 // Toggle password visibility
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
@@ -41,8 +50,18 @@ function getCategoryIcon(category) {
 }
 
 // Check if user is authenticated
+//function checkAuth() {
+//    if (!jwtToken) {
+//        window.location.href = 'index.html';
+//        return false;
+//    }
+//    return true;
+//}
+
 function checkAuth() {
-    if (!jwtToken) {
+    const token = getAuthToken();
+
+    if (!token) {
         window.location.href = 'index.html';
         return false;
     }
@@ -84,18 +103,29 @@ function getAuthToken() {
 }
 
 // API helper functions
-async function apiRequest(url, options = {}) {
+//async function apiRequest(url, options = {}) {
+//
+//    const token = getAuthToken();
+//   // const token = getAuthToken();
+//
+//    const defaultOptions = {
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'Authorization': `Bearer ${token}`,
+//            ...options.headers
+//        }
+//    };
 
-    const token = getAuthToken();
-   // const token = getAuthToken();
-    
-    const defaultOptions = {
+async function apiRequest(url, options = {}) {
+    const token = getAuthToken(); // ✅ dynamic
+
+    const response = await fetch(url, {
+        ...options,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-            ...options.headers
+            'Authorization': `Bearer ${token}` // ✅ FIX
         }
-    };
+    });
 
     const response = await fetch(url, { ...defaultOptions, ...options });
     
