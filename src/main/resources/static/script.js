@@ -1,14 +1,9 @@
 // Global variables
 let editingExpenseId = null;
-//const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
-window.API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
-//const jwtToken = localStorage.getItem('jwtToken');
+const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
+const jwtToken = localStorage.getItem('jwtToken');
 let allExpensesData = []; // Store all expenses for monthly reports
 
-/////////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////
 // Toggle password visibility
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
@@ -46,18 +41,8 @@ function getCategoryIcon(category) {
 }
 
 // Check if user is authenticated
-//function checkAuth() {
-//    if (!jwtToken) {
-//        window.location.href = 'index.html';
-//        return false;
-//    }
-//    return true;
-//}
-
 function checkAuth() {
-    const token = getAuthToken();
-
-    if (!token) {
+    if (!jwtToken) {
         window.location.href = 'index.html';
         return false;
     }
@@ -98,12 +83,10 @@ function getAuthToken() {
     return localStorage.getItem('jwtToken');
 }
 
- API helper functions
+// API helper functions
 async function apiRequest(url, options = {}) {
-
     const token = getAuthToken();
-   // const token = getAuthToken();
-
+    
     const defaultOptions = {
         headers: {
             'Content-Type': 'application/json',
@@ -111,17 +94,6 @@ async function apiRequest(url, options = {}) {
             ...options.headers
         }
     };
-
-//async function apiRequest(url, options = {}) {
-//    const token = getAuthToken(); // ✅ dynamic
-//
-//    const response = await fetch(url, {
-//        ...options,
-//        headers: {
-//            'Content-Type': 'application/json',
-//            'Authorization': `Bearer ${token}` // ✅ FIX
-//        }
-//    });
 
     const response = await fetch(url, { ...defaultOptions, ...options });
     
