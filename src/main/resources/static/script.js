@@ -1,6 +1,7 @@
 // Global variables
 let editingExpenseId = null;
-const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
+//const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
+window.API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
 //const jwtToken = localStorage.getItem('jwtToken');
 let allExpensesData = []; // Store all expenses for monthly reports
 
