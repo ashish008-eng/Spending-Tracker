@@ -5,12 +5,7 @@ const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
 let allExpensesData = []; // Store all expenses for monthly reports
 
 /////////////////////////////////////////////////////////////////////////////////
-const API_BASE_URL = "https://spending-tracker-ha0d.onrender.com";
 
-// ✅ FIX
-function getAuthToken() {
-    return localStorage.getItem('jwtToken');
-}
 
 //////////////////////////////////////////////////////////////
 // Toggle password visibility
@@ -102,30 +97,30 @@ function getAuthToken() {
     return localStorage.getItem('jwtToken');
 }
 
-// API helper functions
-//async function apiRequest(url, options = {}) {
-//
-//    const token = getAuthToken();
-//   // const token = getAuthToken();
-//
-//    const defaultOptions = {
-//        headers: {
-//            'Content-Type': 'application/json',
-//            'Authorization': `Bearer ${token}`,
-//            ...options.headers
-//        }
-//    };
-
+ API helper functions
 async function apiRequest(url, options = {}) {
-    const token = getAuthToken(); // ✅ dynamic
 
-    const response = await fetch(url, {
-        ...options,
+    const token = getAuthToken();
+   // const token = getAuthToken();
+
+    const defaultOptions = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // ✅ FIX
+            'Authorization': `Bearer ${token}`,
+            ...options.headers
         }
-    });
+    };
+
+//async function apiRequest(url, options = {}) {
+//    const token = getAuthToken(); // ✅ dynamic
+//
+//    const response = await fetch(url, {
+//        ...options,
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'Authorization': `Bearer ${token}` // ✅ FIX
+//        }
+//    });
 
     const response = await fetch(url, { ...defaultOptions, ...options });
     
